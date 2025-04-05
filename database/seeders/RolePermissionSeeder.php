@@ -61,7 +61,7 @@ class RolePermissionSeeder extends Seeder
         $user = User::create([
             'name' => "Super Admin",
             'email' => "super@admin.com",
-            'occupation' => "Superadmin",
+            'occupation' => "Superadmin ",
             'experience' => 100,
             'avatar' => "images/default-avatar.png",
             'password' => '123123123',
