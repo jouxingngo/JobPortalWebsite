@@ -22,6 +22,6 @@ class JobCandidate extends Model
             return $this->belongsTo(CompanyJob::class,'company_job_id');
     }
     public function profile(){
-        return $this->belongsTo(JobCandidate::class,'candidate_id');
+        return $this->belongsTo(User::class, 'candidate_id');
     }
 }

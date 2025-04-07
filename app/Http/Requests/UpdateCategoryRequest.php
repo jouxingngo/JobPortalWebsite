@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCategoryRequest extends FormRequest
@@ -22,7 +23,7 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name"=> "string|required|max:255",
+            'name' => 'required|string|max:255|unique:categories,name,' . $this->category->id,
             "icon"=> "image|sometimes|mimes:png,jpg,jpeg",
         ];
     }

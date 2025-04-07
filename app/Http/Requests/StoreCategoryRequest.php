@@ -22,7 +22,7 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name"=> "string|required|max:255",
+            "name" => "string|required|max:255|unique:categories,name",
             "icon"=> "image|required|mimes:png,jpg,jpeg",
         ];
     }

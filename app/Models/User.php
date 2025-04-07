@@ -28,10 +28,11 @@ class User extends Authenticatable
     ];
 
     public function companies(){
-        return $this->hasMany(Company::class);
+        return $this->hasMany(Company::class, 'employer_id');
     }
-    public function jobs_applications(){
-        return $this->hasMany(JobCandidate::class);
+    public function job_applications()
+    {
+        return $this->hasMany(JobCandidate::class, 'candidate_id');
     }
 
     /**

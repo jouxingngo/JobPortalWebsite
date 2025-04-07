@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::middleware('can:manage candidates')->group(function () {
-            Route::resource('job_)candidates', JobCandidateController::class);
+            Route::resource('job_candidates', JobCandidateController::class);
             Route::get('/candidate/{job_candidate}/resume/download', [JobCandidateController::class, 'download_file'])->name('download_resume');
         });
     });
