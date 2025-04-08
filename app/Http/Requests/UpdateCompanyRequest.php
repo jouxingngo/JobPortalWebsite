@@ -23,7 +23,7 @@ class UpdateCompanyRequest extends FormRequest
     {
         return [
             //
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:companies,name,' . $this->company->id,
             'logo' => 'sometimes|image|mimes:png,jpg,jpeg',
             'about' => 'required|string|max:65535',
         ];

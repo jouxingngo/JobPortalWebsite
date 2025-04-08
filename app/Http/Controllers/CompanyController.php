@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCompanyRequest;
+use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CompanyController extends Controller
@@ -44,12 +46,12 @@ class CompanyController extends Controller
         $user = Auth::user();
         $company = $user->companies()->first();
         if ($company) {
-            return redirect()->back()->withErrors(['company' => "Gagal! Anda sudah membuat company."]);
+            return redirect()->route('admin.company.index')->with('error', 'Gagal! Anda sudah membuat company.');
         }
         DB::transaction(function () use ($request, $user) {
             $validated = $request->validated();
             if ($request->hasFile('logo')) {
-                $logoPath = $request->file('logo')->store('logo/' . date('Y/m/d'), 'public');
+                $logoPath = $request->file('logo')->store('logos/' . date('Y/m/d'), 'public');
                 $validated['logo'] = $logoPath;
             }
             $validated['slug'] = Str::slug($validated['name']);
@@ -73,14 +75,28 @@ class CompanyController extends Controller
     public function edit(Company $company)
     {
         //
+        return view('admin.company.edit', compact('company'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Company $company)
+    public function update(UpdateCompanyRequest $request, Company $company)
     {
         //
+        DB::transaction(function () use ($request, $company) {
+            $validated = $request->validated();
+            if ($request->hasFile('logo')) {
+                if ($company->logo && Storage::disk('public')->exists($company->logo)) {
+                    Storage::disk('public')->delete($company->logo);
+                }
+                $logoPath = $request->file('logo')->store('logos/' . date('Y/m/d'), 'public');
+                $validated['logo'] = $logoPath;
+            }
+            $validated['slug'] = Str::slug($validated['name']);
+            $company->update($validated);
+        });
+        return redirect()->route('admin.company.index');
     }
 
     /**
@@ -89,5 +105,12 @@ class CompanyController extends Controller
     public function destroy(Company $company)
     {
         //
+        DB::transaction(function () use ($company) {
+            if ($company->logo && Storage::disk('public')->exists($company->logo)) {
+                Storage::disk('public')->delete($company->logo);
+            }
+            $company->delete();
+        });
+        return redirect()->route('admin.company.index');
     }
 }

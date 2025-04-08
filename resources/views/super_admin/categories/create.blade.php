@@ -37,20 +37,20 @@
             </div>
         </div>
     </div>
-    @push('script')
-        <script>
-            document.getElementById('icon').addEventListener('change', function(event) {
-                const input = event.target;
-                if (input.files && input.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const preview = document.getElementById('preview');
-                        preview.src = e.target.result;
-                        document.getElementById('preview-container').style.display = 'block';
-                    };
-                    reader.readAsDataURL(input.files[0]);
-                }
-            });
-        </script>
-    @endpush
+    @push('scripts')
+    <script>
+        document.getElementById('icon').addEventListener('change', function(event) {
+            const input = event.target;
+            const preview = document.getElementById('icon-preview');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        });
+    </script>
+@endpush
 </x-app-layout>

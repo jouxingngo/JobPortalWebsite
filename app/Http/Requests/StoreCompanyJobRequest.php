@@ -11,7 +11,7 @@ class StoreCompanyJobRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,8 +25,9 @@ class StoreCompanyJobRequest extends FormRequest
             //
             'salary' => 'required|integer',
             'company_id' => 'required|integer',
+            'skill_level' => 'required|string|max:255',
             'category_id' => 'required|integer',
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:companies,name',
             'location' => 'required|string|max:255',
             'type' => 'required|string|max:255',
             'thumbnail' => 'required|image|mimes:png,jpg,jpeg',

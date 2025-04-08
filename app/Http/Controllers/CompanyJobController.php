@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCompanyJobRequest;
+use App\Http\Requests\UpdateCompanyJobRequest;
 use App\Models\Category;
 use App\Models\Company;
 use App\Models\CompanyJob;
@@ -62,7 +63,7 @@ class CompanyJobController extends Controller
 
             $new_job = CompanyJob::create($validated);
 
-            if (!empty($validated->responsibilities)) {
+            if (!empty($validated['responsibilities'])) {
                 foreach ($validated['responsibilities'] as $responsibility) {
                     $new_job->responsibilities()->create([
                         'name' => $responsibility
@@ -71,7 +72,7 @@ class CompanyJobController extends Controller
             }
 
             if (!empty($validated['qualifications'])) {
-                foreach ($validated['qualicifactions'] as $qualification) {
+                foreach ($validated['qualifications'] as $qualification) {
                     $new_job->qualifications()->create([
                         'name' => $qualification
                     ]);
@@ -87,6 +88,9 @@ class CompanyJobController extends Controller
     public function show(CompanyJob $companyJob)
     {
         //
+        // Force eager load 'qualifications' relasi
+        $companyJob->load(['qualifications', 'responsibilities', 'candidates', 'candidates.profile']);
+        return view('admin.company_jobs.show', compact('companyJob'));
     }
 
     /**
@@ -95,14 +99,17 @@ class CompanyJobController extends Controller
     public function edit(CompanyJob $companyJob)
     {
         //
+        $categories = Category::all();
+        return view('admin.company_jobs.edit', compact('companyJob', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CompanyJob $companyJob)
+    public function update(UpdateCompanyJobRequest $request, CompanyJob $companyJob)
     {
         //
+
     }
 
     /**
