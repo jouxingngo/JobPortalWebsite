@@ -10,23 +10,24 @@
 
                 <div class="item-card flex flex-row gap-y-10 justify-between md:items-center">
                     <div class="flex flex-row items-center gap-x-3">
-                        <img src=" " alt="" class="rounded-2xl object-cover w-[120px] h-[90px]">
+                        <img src="{{ Storage::url($jobCandidate->companyJob->thumbnail) }} " alt=""
+                            class="rounded-2xl object-cover w-[120px] h-[90px]">
                         <div class="flex flex-col">
-                            <h3 class="text-indigo-950 text-xl font-bold">asdasdasd</h3>
-                            <p class="text-slate-500 text-sm">qweqweqwe</p>
+                            <h3 class="text-indigo-950 text-xl font-bold">{{ $jobCandidate->companyJob->name }}</h3>
+                            <p class="text-slate-500 text-sm">{{ $jobCandidate->companyJob->category->name }}</p>
                         </div>
-                        
+
                     </div>
                     <div class="hidden md:flex flex-col">
                         <p class="text-slate-500 text-sm">Salary</p>
                         <h3 class="text-indigo-950 text-xl font-bold">
-                            Rp 12312312/mo
+                            Rp {{ number_format($jobCandidate->companyJob->salary, 0, ',', '.') }}/mo
                         </h3>
                     </div>
                     <div class="hidden md:flex flex-col">
                         <p class="text-slate-500 text-sm">Type</p>
                         <h3 class="text-indigo-950 text-xl font-bold">
-                            sdasdasdasd
+                            {{ $jobCandidate->companyJob->type }}
                         </h3>
                     </div>
                 </div>
@@ -37,54 +38,59 @@
 
                 <div class="flex flex-row items-center justify-between">
                     <div class="flex flex-row items-center gap-x-3">
-                        <img src=" " alt="" class="rounded-full object-cover w-[70px] h-[70px]">
+                        <img src="{{ Storage::url($jobCandidate->profile->avatar) }}" alt=""
+                            class="rounded-full object-cover w-[70px] h-[70px]">
                         <div class="flex flex-col">
-                            <h3 class="text-indigo-950 text-xl font-bold">asdasdad</h3>
-                            <p class="text-slate-500 text-sm">adsadasdasd - 123123 yrs exp</p>
+                            <h3 class="text-indigo-950 text-xl font-bold">{{ $jobCandidate->profile->name }}</h3>
+                            <p class="text-slate-500 text-sm">{{ $jobCandidate->profile->occupation }} -
+                                {{ number_format($jobCandidate->profile->experience) }} yrs exp</p>
                         </div>
                     </div>
 
-
-                            <span class="w-fit text-sm font-bold py-2 px-3 rounded-full bg-green-500 text-white">
-                                HIRED
-                            </span>
-
-                            <span class="w-fit text-sm font-bold py-2 px-3 rounded-full bg-orange-500 text-white">
-                                WAITING
-                            </span> 
-
-                            <span class="w-fit text-sm font-bold py-2 px-3 rounded-full bg-red-500 text-white">
-                                REJECTED
-                            </span>
+                    @if ($jobCandidate->is_hired)
+                        <span class="w-fit text-sm font-bold py-2 px-3 rounded-full bg-green-500 text-white">
+                            HIRED
+                        </span>
+                    @elseif (!$jobCandidate->is_hired && $jobCandidate->companyJob->is_open)
+                        <span class="w-fit text-sm font-bold py-2 px-3 rounded-full bg-orange-500 text-white">
+                            WAITING
+                        </span>
+                    @elseif (!$jobCandidate->is_hired)
+                        <span class="w-fit text-sm font-bold py-2 px-3 rounded-full bg-red-500 text-white">
+                            REJECTED
+                        </span>
+                    @endif
 
 
                 </div>
-                
+
                 <div class="flex flex-col gap-y-3">
                     <h3 class="text-indigo-950 text-xl font-bold mt-5">Message</h3>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro optio velit incidunt possimus consequatur esse excepturi minima perspiciatis iure eveniet iusto dolores inventore voluptatem, quo itaque autem aut numquam nulla?
-                </p>
+                    <p>
+                        {{ $jobCandidate->message }}
+                    </p>
                 </div>
-                
 
+                @if ($jobCandidate->is_hired && !$jobCandidate->companyJob->is_open)
                     <hr class="my-5">
                     <h3 class="text-indigo-950 text-xl font-bold">Congrats! Anda terpilih bekerja</h3>
                     <p>
-                        Anda akan segera mendapatkan instruksi selanjutnya dari perusahaan asdasd terkait workflow pekerjaan. Silahkan periksa email Anda dengan berkala. Have a great career!
+                        Anda akan segera mendapatkan instruksi selanjutnya dari perusahaan asdasd terkait workflow
+                        pekerjaan. Silahkan periksa email Anda dengan berkala. Have a great career!
                     </p>
-
-                        <hr class="my-5">
-                        <h3 class="text-indigo-950 text-xl font-bold">Sorry! Anda belum beruntung</h3>
-                        <p>
-                            Silahkan mencoba apply pada pekerjaan lainnya yang tersedia!
-                        </p>
-                        <p>
-                            <a href=" " class="font-bold py-3 px-10 rounded-full bg-indigo-700 text-white">
+                @elseif (!$jobCandidate->is_hired && !$jobCandidate->companyJob->is_open)
+                    <hr class="my-5">
+                    <h3 class="text-indigo-950 text-xl font-bold">Sorry! Anda belum beruntung</h3>
+                    <p>
+                        Silahkan mencoba apply pada pekerjaan lainnya yang tersedia!
+                    </p>
+                    <p>
+                        <a href=" {{ route('front.index') }}" class="font-bold py-3 px-10 rounded-full bg-indigo-700 text-white">
                             Explore Jobs</a>
-                        </p>
+                    </p>
+                @endif
 
-                
+
             </div>
         </div>
     </div>

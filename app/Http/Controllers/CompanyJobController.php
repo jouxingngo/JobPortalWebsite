@@ -99,6 +99,9 @@ class CompanyJobController extends Controller
     public function edit(CompanyJob $companyJob)
     {
         //
+        if (Auth::id() != $companyJob->company->employer_id) {
+            abort(403);
+        }
         $categories = Category::all();
         return view('admin.company_jobs.edit', compact('companyJob', 'categories'));
     }

@@ -12,7 +12,7 @@ class DashboardController extends Controller
 
     public function my_applications(){
         $user = Auth::user();
-        $my_applications = $user->job_applications()->latest('id')->paginate(10);
+        $my_applications = $user->job_applications()->with(['companyJob', 'companyJob.company', 'companyJob.category'])->latest('id')->paginate(10);
         return view('dashboard.my_applications', compact('my_applications'));
     }
 
@@ -22,7 +22,8 @@ class DashboardController extends Controller
         if ($jobCandidate->candidate_id != $user->id) {
             abort(403);
         }
+        $jobCandidate->load(['companyJob', 'profile']);
 
-        return view('dashboard.my-application-details', compact('jobCandidate'));
+        return view('dashboard.my_application_details', compact('jobCandidate'));
     }
 }

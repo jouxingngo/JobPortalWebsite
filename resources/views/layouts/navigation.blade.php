@@ -15,6 +15,9 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('front.index')" :active="request()->routeIs('front.index')">
+                        {{ __('Home') }}
+                    </x-nav-link>
                     @can('manage categories')
                         <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.index')">
                             {{ __('Manage Categories') }}
@@ -114,7 +117,9 @@
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
-
+                <x-responsive-nav-link :href="route('front.index')">
+                    {{ __('Home') }}
+                </x-responsive-nav-link>
                 @can('manage categories')
                     <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.index')">
                         {{ __('Manage Categories') }}
@@ -138,7 +143,9 @@
                         {{ __('My Job Application') }}
                     </x-responsive-nav-link>
                 @endcan
-
+                <x-responsive-nav-link :href="route('front.index')">
+                    {{ __('Home') }}
+                </x-responsive-nav-link>
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

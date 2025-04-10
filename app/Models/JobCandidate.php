@@ -18,7 +18,8 @@ class JobCandidate extends Model
         'company_job_id',
     ];
 
-    public function job(){
+    public function companyJob()
+    {
             return $this->belongsTo(CompanyJob::class,'company_job_id');
     }
     public function profile(){
