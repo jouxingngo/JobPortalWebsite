@@ -14,7 +14,7 @@
 
         <section id="Result" class="container max-w-[1130px] mx-auto flex flex-col gap-[30px] mt-[70px] w-fit">
             <div class="categories-container grid grid-cols-3 gap-[30px]">
-                @forelse ($category->jobs as $job)
+                @forelse ($jobs as $job)
                     <div
                         class="card w-[300px] flex flex-col shrink-0 rounded-[20px] border border-[#E8E4F8] p-5 gap-5 bg-white shadow-[0_8px_30px_0_#0E01400D] hover:ring-2 hover:ring-[#FF6B2C] transition-all duration-300">
                         <div class="company-info flex items-center gap-3">
@@ -70,6 +70,7 @@
                 
                 @endforelse
             </div>
+            {{ $jobs->links() }}
         </section>
 
     </body>
@@ -79,7 +80,7 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <!-- JavaScript -->
     <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
-
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         $('.main-carousel').flickity({
             // options

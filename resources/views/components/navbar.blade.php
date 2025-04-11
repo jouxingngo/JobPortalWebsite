@@ -5,7 +5,7 @@
     <ul class="flex items-center gap-10">
         <li>
             <a href="{{ route('front.index') }}"
-                class="transition-all duration-300 hover:font-semibold hover:text-[#FF6B2C] font-semibold text-[#FF6B2C]">Home</a>
+                class="transition-all duration-300 hover:font-semibold hover:text-[#FF6B2C] font-semibold {{ request()->routeIs('front.index') ?  'text-[#FF6B2C]' : 'text-white'  }}">Home</a>
         </li>
         <li>
             <a href="index.html"

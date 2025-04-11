@@ -52,6 +52,7 @@
                 @empty
                     <p>Belum ada data terbaru.</p>
                 @endforelse
+                {{ $company_jobs->links() }}
 
             </div>
         </div>

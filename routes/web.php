@@ -22,6 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('search/jobs/', [FrontController::class, 'search'])->name('front.search');
 
 
     Route::middleware('can:apply job')->group(function () {
@@ -37,7 +38,6 @@ Route::middleware('auth')->group(function () {
             Route::get('my-applications', [DashboardController::class, 'my_applications'])->name('my.applications');
             Route::get('my-application/{job_candidate}', [DashboardController::class, 'my_application_details'])->name('my.application.details');
         });
-
     });
 
     Route::prefix('admin')->name('admin.')->group(function () {
@@ -59,5 +59,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 });
-
-require __DIR__.'/auth.php';
+Route::fallback(function () {
+    return redirect('/');
+});
+require __DIR__ . '/auth.php';

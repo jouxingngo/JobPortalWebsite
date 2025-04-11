@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,7 @@ use Illuminate\Support\Str;
 
 class CompanyController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -75,6 +77,10 @@ class CompanyController extends Controller
     public function edit(Company $company)
     {
         //
+        // if (Auth::id() != $company->employer_id) {
+        //     abort(403);
+        // }
+        $this->authorize('edit', $company);
         return view('admin.company.edit', compact('company'));
     }
 
@@ -83,6 +89,7 @@ class CompanyController extends Controller
      */
     public function update(UpdateCompanyRequest $request, Company $company)
     {
+
         //
         DB::transaction(function () use ($request, $company) {
             $validated = $request->validated();
@@ -104,6 +111,8 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
+        $this->authorize('delete', $company);
+
         //
         DB::transaction(function () use ($company) {
             if ($company->logo && Storage::disk('public')->exists($company->logo)) {

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateCompanyJobRequest;
 use App\Models\Category;
 use App\Models\Company;
 use App\Models\CompanyJob;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,7 @@ use Illuminate\Support\Str;
 
 class CompanyJobController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -23,7 +25,7 @@ class CompanyJobController extends Controller
         $user = Auth::user();
         $my_company = $user->companies()->first();
         if ($my_company) {
-            $company_jobs = $my_company->jobs()->with(['category'])->paginate(10);
+            $company_jobs = $my_company->jobs()->with(['category'])->paginate(6);
         } else {
             $company_jobs = collect(); //empty collection
         }
@@ -40,7 +42,7 @@ class CompanyJobController extends Controller
         $user = Auth::user();
         $my_company = $user->companies()->first();
         if (!$my_company) {
-            // return redirect()->route('admin.company.create');
+            return redirect()->route('admin.company.create');
         }
         $categories = Category::all();
         return view('admin.company_jobs.create', compact('my_company', 'categories'));
@@ -89,6 +91,7 @@ class CompanyJobController extends Controller
     {
         //
         // Force eager load 'qualifications' relasi
+        $this->authorize('view', $companyJob);
         $companyJob->load(['qualifications', 'responsibilities', 'candidates', 'candidates.profile']);
         return view('admin.company_jobs.show', compact('companyJob'));
     }
@@ -99,9 +102,10 @@ class CompanyJobController extends Controller
     public function edit(CompanyJob $companyJob)
     {
         //
-        if (Auth::id() != $companyJob->company->employer_id) {
-            abort(403);
-        }
+        // if (Auth::id() != $companyJob->company->employer_id) {
+        //     abort(403);
+        // }
+        $this->authorize('edit', $companyJob);
         $categories = Category::all();
         return view('admin.company_jobs.edit', compact('companyJob', 'categories'));
     }
@@ -112,7 +116,7 @@ class CompanyJobController extends Controller
     public function update(UpdateCompanyJobRequest $request, CompanyJob $companyJob)
     {
         //
-
+        $this->authorize('update', $companyJob);
     }
 
     /**
@@ -121,5 +125,6 @@ class CompanyJobController extends Controller
     public function destroy(CompanyJob $companyJob)
     {
         //
+        $this->authorize('delete', $companyJob);
     }
 }
