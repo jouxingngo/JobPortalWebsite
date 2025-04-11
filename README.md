@@ -1,4 +1,4 @@
-# **ShaynaComp - Multipurpose Company Profile**  
+# **JOBANK - Job Portal Website**  
 Live Preview - [https://jobank.jouxingngo.my.id/](https://jobank.jouxingngo.my.id/)
 <br/>  
 <div align="center">  
